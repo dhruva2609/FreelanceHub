@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post a Job - Client</title>
+  <!-- Bootstrap CSS -->
+<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Page-Specific CSS (for form and page layout) -->
+  <link rel="stylesheet" href="css/client-post-job.css">
+  <!-- Global Common CSS (for navbar and shared styles) -->
+  <link rel="stylesheet" href="css/commonc.css">
+  <script src="js/commonc.js" defer></script>
+</head>
+<body>
+  <!-- Navbar -->
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="client-dashboard.html">Client Panel</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="client-dashboard.html">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="client-post-job.html">Post a Job</a></li>
+          <li class="nav-item"><a class="nav-link" href="client-manage-jobs.html">Manage Jobs</a></li>
+          <li class="nav-item"><a class="nav-link" href="client-proposal-received.html">Proposals</a></li>
+          <li class="nav-item"><a class="nav-link" href="client-project-progress.html">Project Progress</a></li> <!-- Added -->
+          <li class="nav-item"><a class="nav-link" href="client-messages.html">Messages</a></li>
+          <li class="nav-item"><a class="nav-link" href="client-payments.html">Payments</a></li>
+          <li class="nav-item"><a class="nav-link" href="client-settings.html">Settings</a></li>
+          <li class="nav-item"><a class="nav-link logout-btn" href="../logout.php">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- Job Form Section -->
+  <div class="container my-5">
+    <div class="page-container mx-auto">
+      <h2>Post a Job</h2>
+      <form id="postJobForm" method="POST">
+        <label for="title">Job Title</label>
+        <input name="title" id="title" class="form-control mb-3" placeholder="Enter job title" required />
+
+        <label for="description">Job Description</label>
+        <textarea name="description" id="description" class="form-control mb-3" rows="4" placeholder="Describe the job"
+          required></textarea>
+
+        <label for="category">Category</label>
+        <select name="category" id="category" class="form-select mb-3" required>
+          <option value="">Select Category</option>
+          <option>Web Development</option>
+          <option>Graphic Design</option>
+          <option>Content Writing</option>
+        </select>
+
+        <label for="budget">Budget ($)</label>
+        <input name="budget" id="budget" type="number" class="form-control mb-3" placeholder="Enter budget" required />
+
+
+        <button type="submit" class="btn btn-primary w-100">Submit</button>
+      </form>
+      <div id="statusMessage" class="mt-4 text-center"></div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS Bundle -->
+  <script src="bootstrap/bootstrap.bundle.min.js"></script>
+
+  <script>
+    document.getElementById("postJobForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+  const form = e.target;
+  const formData = new FormData(form);
+  const statusDiv = document.getElementById("statusMessage");
+
+  fetch("php/post_job.php", {
+    method: "POST",
+    body: formData,
+    credentials: "include"
+  })
+  .then(res => res.text()) // 🔥 Parse as plain text, not JSON
+  .then((responseText) => {
+    statusDiv.innerHTML = `<div class="alert alert-info">${responseText}</div>`;
+    form.reset();
+  })
+  .catch((err) => {
+    console.error("Error:", err);
+    statusDiv.innerHTML = `<div class="alert alert-danger">Error: ${err.message}</div>`;
+  });
+});
+
+  </script>
+
+</body>
+
+</html>

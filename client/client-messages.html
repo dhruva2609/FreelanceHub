@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Client Chat</title>
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="css/commonc.css" />
+  <style>
+    :root {
+      --primary-color: #4E73DF;
+      --light-gray: #f8f9fc;
+      --dark-text: #343a40;
+      --light-blue: #dbe5fd;
+      --sender-bg: #4E73DF;
+      --receiver-bg: #f1f1f1;
+      --sender-text: #ffffff;
+      --receiver-text: #000000;
+      --border-color: #e2e6ea;
+    }
+    
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--light-gray);
+    }
+    
+    .chat-wrapper {
+      display: flex;
+      height: calc(100vh - 70px);
+      margin-top: 70px;
+      overflow: hidden;
+    }
+    
+    .sidebar {
+      width: 250px;
+      background-color: white;
+      border-right: 1px solid var(--border-color);
+      padding: 1rem;
+      overflow-y: auto;
+    }
+    
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .sidebar li {
+      padding: 10px 15px;
+      margin-bottom: 8px;
+      background-color: var(--light-blue);
+      color: var(--dark-text);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    
+    .sidebar li:hover {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    
+    .chat-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background-color: white;
+    }
+    
+    .chat-header {
+      padding: 1rem 1.5rem;
+      background-color: var(--primary-color);
+      color: white;
+      font-weight: 600;
+      font-size: 1.2rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .chat-messages {
+      flex: 1;
+      padding: 1rem 1.5rem;
+      overflow-y: auto;
+      background-color: var(--light-gray);
+      display: flex;
+      flex-direction: column;
+      scroll-behavior: smooth;
+    }
+    
+    .message {
+      max-width: 70%;
+      padding: 0.75rem 1rem;
+      margin: 0.5rem 0;
+      border-radius: 15px;
+      word-wrap: break-word;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+    
+    .sender {
+      margin-left: auto;
+      background-color: var(--sender-bg);
+      color: var(--sender-text);
+      border-bottom-right-radius: 0;
+      border: 1px solid #3b5cc9;
+      text-align: right;
+    }
+    
+    .receiver {
+      margin-right: auto;
+      background-color: var(--receiver-bg);
+      color: var(--receiver-text);
+      border-bottom-left-radius: 0;
+      border: 1px solid var(--border-color);
+      text-align: left;
+    }
+    
+    .message small {
+      display: block;
+      font-size: 0.7rem;
+      margin-top: 5px;
+      color: #6c757d;
+    }
+    
+    .chat-input {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      gap: 0.5rem;
+      background-color: white;
+    }
+    
+    .chat-input input {
+      flex: 1;
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      border: 1px solid #ced4da;
+      outline: none;
+    }
+    
+    .chat-input button {
+      padding: 0.6rem 1.2rem;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    
+    .chat-input button:hover {
+      background-color: #3b5cc9;
+    }
+    
+    .navbar {
+      background-color: var(--primary-color);
+    }
+    
+    .navbar .nav-link,
+    .navbar-brand {
+      color: white !important;
+    }
+    
+    .navbar .nav-link:hover {
+      color: #d1d8f3 !important;
+    }
+    </style>
+    
+  
+</head>
+<body>
+<!-- Navbar -->
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" href="client-dashboard.html">Client Panel</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link active" href="client-dashboard.html">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="client-post-job.html">Post a Job</a></li>
+        <li class="nav-item"><a class="nav-link" href="client-manage-jobs.html">Manage Jobs</a></li>
+        <li class="nav-item"><a class="nav-link" href="client-proposal-received.html">Proposals</a></li>
+        <li class="nav-item"><a class="nav-link" href="client-project-progress.html">Project Progress</a></li> <!-- Added -->
+        <li class="nav-item"><a class="nav-link" href="client-messages.html">Messages</a></li>
+        <li class="nav-item"><a class="nav-link" href="client-payments.html">Payments</a></li>
+        <li class="nav-item"><a class="nav-link" href="client-settings.html">Settings</a></li>
+        <li class="nav-item"><a class="nav-link logout-btn" href="../logout.php">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="chat-wrapper">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <ul class="chat-list" id="chatList"></ul>
+  </div>
+
+  <!-- Main Chat Window -->
+  <div class="chat-main">
+    <div class="chat-header" id="receiverName">Select a chat</div>
+    <div class="chat-messages" id="chatBox"></div>
+    <div class="chat-input">
+      <input type="text" id="messageInput" placeholder="Type a message..." />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let loggedInUserId = 101; // Replace with PHP session user ID dynamically
+let currentChatUserId = null;
+let autoRefreshInterval = null;
+
+function loadChatList() {
+  fetch(`php/fetch_chats.php?user_id=${loggedInUserId}`)
+    .then(res => res.json())
+    .then(data => {
+      const list = document.getElementById('chatList');
+      list.innerHTML = '';
+      data.forEach(user => {
+        const li = document.createElement('li');
+        li.textContent = user.name;
+        li.onclick = () => {
+          currentChatUserId = user.user_id;
+          document.getElementById("receiverName").textContent = user.name;
+          loadMessages();
+
+          // Start real-time refresh
+          if (autoRefreshInterval) clearInterval(autoRefreshInterval);
+          autoRefreshInterval = setInterval(loadMessages, 2000);
+        };
+        list.appendChild(li);
+      });
+    })
+    .catch(error => console.error('Error loading chat list:', error));
+}
+
+function loadMessages() {
+  if (!currentChatUserId) return;
+  fetch(`php/fetch_messages.php?sender_id=${loggedInUserId}&receiver_id=${currentChatUserId}`)
+    .then(res => res.json())
+    .then(data => {
+      const box = document.getElementById('chatBox');
+      box.innerHTML = '';
+      data.forEach(msg => {
+        const div = document.createElement('div');
+        div.classList.add('message', msg.sender_id == loggedInUserId ? 'sender' : 'receiver');
+        div.innerHTML = `${msg.message_text}<small>${msg.sender_name} • ${msg.created_at}</small>`;
+        box.appendChild(div);
+      });
+      box.scrollTop = box.scrollHeight;
+    })
+    .catch(error => console.error('Error loading messages:', error));
+}
+
+function sendMessage() {
+  const messageInput = document.getElementById('messageInput');
+  const messageText = messageInput.value.trim();
+
+  if (!messageText || !currentChatUserId) return;
+
+  const messageData = {
+    sender_id: loggedInUserId,
+    receiver_id: currentChatUserId,
+    message_text: messageText
+  };
+
+  // Optimistically add message to UI for instant feedback
+  const box = document.getElementById('chatBox');
+  const div = document.createElement('div');
+  div.classList.add('message', 'sender');
+  const timestamp = new Date().toLocaleTimeString();
+  div.innerHTML = `${messageText}<small>You • ${timestamp}</small>`;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+  messageInput.value = '';
+
+  // Send to backend
+  fetch('php/send_message.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(messageData)
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (!data.success) {
+      console.error('Message failed to send:', data.error);
+    }
+  })
+  .catch(error => {
+    console.error('Error sending message:', error);
+  });
+}
+
+// Optional: Send message on Enter key press
+document.getElementById('messageInput').addEventListener('keyup', function(e) {
+  if (e.key === 'Enter') {
+    sendMessage();
+  }
+});
+
+window.onload = loadChatList;
+</script>
+
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Client Settings</title>
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="css/commonc.css" />
+  <link rel="stylesheet" href="css/client-settings.css" />
+  <style>
+    /* Freelancer Settings Page Styles */
+.settings-container {
+    max-width: 800px;
+    margin: 80px auto 20px;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .settings-container h2 {
+    text-align: center;
+    color: #4E73DF;
+    margin-bottom: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .btn-primary {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+  }
+  
+  @media (max-width: 768px) {
+    .settings-container {
+      width: 90%;
+      padding: 15px;
+    }
+    .btn-primary {
+      font-size: 14px;
+    }
+  }
+  
+  </style>
+</head>
+<body>
+
+   <!-- Navigation -->
+   <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="client-dashboard.html">Client Panel</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="client-dashboard.html">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="client-post-job.html">Post a Job</a></li>
+          <li class="nav-item"><a class="nav-link" href="client-manage-jobs.html">Manage Jobs</a></li>
+          <li class="nav-item"><a class="nav-link" href="client-proposal-received.html">Proposals</a></li>
+          <li class="nav-item"><a class="nav-link" href="client-project-progress.html">Project Progress</a></li> <!-- Added -->
+          <li class="nav-item"><a class="nav-link" href="client-messages.html">Messages</a></li>
+          <li class="nav-item"><a class="nav-link" href="client-payments.html">Payments</a></li>
+          <li class="nav-item"><a class="nav-link" href="client-settings.html">Settings</a></li>
+          <li class="nav-item"><a class="nav-link logout-btn" href="../logout.php">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- Settings Form -->
+  <div class="container settings-container">
+    <h2>Account Settings</h2>
+    <form id="client-settings-form">
+      <div class="form-group">
+        <label for="fullname">Full Name</label>
+        <input type="text" id="fullname" class="form-control" required />
+      </div>
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" class="form-control" required />
+      </div>
+      <div class="form-group">
+        <label for="password">New Password</label>
+        <input type="password" id="password" class="form-control" placeholder="Enter new password" />
+      </div>
+      <div class="form-group">
+        <label for="notifications">Email Notifications</label>
+        <select id="notifications" class="form-select">
+          <option value="enabled">Enabled</option>
+          <option value="disabled">Disabled</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+  </div>
+
+  <!-- Scripts -->
+  <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="js/common.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+  fetch("php/client-settings.php")
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.status === "success") {
+        document.getElementById("fullname").value = data.data.name;
+        document.getElementById("email").value = data.data.email;
+      } else {
+        alert("Error loading user info.");
+      }
+    })
+    .catch((err) => {
+      console.error("Error fetching client settings:", err);
+      alert("Could not load settings. Try again.");
+    });
+});
+
+
+// Submit form
+document.getElementById("client-settings-form").addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const formData = new FormData();
+  formData.append("fullname", document.getElementById("fullname").value);
+  formData.append("email", document.getElementById("email").value);
+  formData.append("password", document.getElementById("password").value);
+  formData.append("notifications", document.getElementById("notifications").value);
+
+  fetch("php/client-settings.php", {
+    method: "POST",
+    body: formData,
+  })
+    .then((response) => response.json())
+    .then((result) => {
+      alert(result.message || "Settings updated!");
+    })
+    .catch((error) => {
+      console.error("Error saving settings:", error);
+      alert("Something went wrong while saving.");
+    });
+});
+
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Dashboard</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/client-dashboard.css">
+    <link rel="stylesheet" href="css/commonc.css"> <!-- Common styles -->
+    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="js/client-dashboard.js" defer></script>
+    <script src="js/commonc.js" defer></script>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+          <a class="navbar-brand" href="client-dashboard.html">Client Panel</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item"><a class="nav-link active" href="client-dashboard.html">Dashboard</a></li>
+              <li class="nav-item"><a class="nav-link" href="client-post-job.html">Post a Job</a></li>
+              <li class="nav-item"><a class="nav-link" href="client-manage-jobs.html">Manage Jobs</a></li>
+              <li class="nav-item"><a class="nav-link" href="client-proposal-received.html">Proposals</a></li>
+              <li class="nav-item"><a class="nav-link" href="client-project-progress.html">Project Progress</a></li> <!-- Added -->
+              <li class="nav-item"><a class="nav-link" href="client-messages.html">Messages</a></li>
+              <li class="nav-item"><a class="nav-link" href="client-payments.html">Payments</a></li>
+              <li class="nav-item"><a class="nav-link" href="client-settings.html">Settings</a></li>
+              <li class="nav-item"><a class="nav-link logout-btn" href="../logout.php">Logout</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      
+  
+
+    <!-- Main Content -->
+    <div class="dashboard-container">
+        <h2>Welcome, Client!</h2>
+
+        <div class="dashboard-stats">
+            <div class="stat-box">
+                <h3><a href="client-manage-jobs.html">Active Jobs</a></h3>
+                <p id="active-jobs">3</p>
+            </div>
+            <div class="stat-box">
+                <h3><a href="client-proposal-received.html">Proposals Received</a></h3>
+                <p id="proposals">12</p>
+            </div>
+            <div class="stat-box">
+                <h3><a href="client-messages.html">Messages</a></h3>
+                <p id="messages">5</p>
+            </div>
+        </div>
+
+        <h3>Recent Activity</h3>
+        <ul class="activity-list">
+            <li>Freelancer <b>John Doe</b> submitted a proposal for <b>Website Development</b>.</li>
+            <li>You hired <b>Jane Smith</b> for <b>Logo Design</b>.</li>
+            <li>Payment of <b>$500</b> released for <b>App Development</b>.</li>
+        </ul>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          fetchDashboardData();
+      });
+      
+      function fetchDashboardData() {
+          fetch('php/fetch_dashboard.php')
+              .then(response => response.json())
+              .then(data => {
+                  // Update Dashboard Stats
+                  document.getElementById("active-jobs").textContent = data.active_jobs || 0;
+                  document.getElementById("proposals").textContent = data.proposals_received || 0;
+                  document.getElementById("messages").textContent = data.unread_messages || 0;
+      
+                  // Update Recent Activity
+                  let activityList = document.querySelector(".activity-list");
+                  activityList.innerHTML = ""; // Clear existing list
+                  if (data.recent_activity.length > 0) {
+                      data.recent_activity.forEach(activity => {
+                          let listItem = `<li>${activity}</li>`;
+                          activityList.innerHTML += listItem;
+                      });
+                  } else {
+                      activityList.innerHTML = "<li>No recent activity</li>";
+                  }
+              })
+              .catch(error => console.error('Error fetching dashboard data:', error));
+      }
+      </script>
+      
+</body>
+</html>

@@ -1,0 +1,91 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #4E73DF;
+    font-weight: bold;
+}
+
+table {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    overflow-x: auto; /* Enable horizontal scroll on small screens */
+}
+
+th {
+    background: #4E73DF;
+    color: white;
+    text-align: center;
+    padding: 12px;
+}
+
+td {
+    text-align: center;
+    vertical-align: middle;
+    padding: 10px;
+}
+
+/* Ensure buttons in table cells are centered and spaced */
+td.action-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.view-btn {
+    background: #4E73DF;
+    color: white;
+}
+
+.delete-btn {
+    background: #dc3545;
+    color: white;
+}
+
+.view-btn:hover {
+    background: #154b91;
+}
+
+.delete-btn:hover {
+    background: #b52b33;
+}
+
+/* Mobile View Adjustments */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    h2 {
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+    
+    table {
+        font-size: 12px;
+    }
+    
+    th, td {
+        padding: 8px;
+    }
+    
+    button {
+        padding: 6px 10px;
+        font-size: 14px;
+    }
+}

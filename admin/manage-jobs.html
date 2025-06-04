@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Jobs - FreelanceHub Admin</title>
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/admin-dashboard.css">
+</head>
+<style>
+    /* Buttons for managing users */
+.btn-toggle,
+.btn-delete {
+    padding: 6px 12px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-right: 5px;
+}
+
+.btn-toggle {
+    background-color: #1e90ff;
+    color: white;
+}
+
+.btn-toggle:hover {
+    background-color: #156dc5;
+}
+
+.btn-delete {
+    background-color: #ff4d4d;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #cc0000;
+}
+
+</style>
+<body>
+
+    <aside class="sidebar">
+        <div class="logo">FreelanceHub <span>Admin</span></div>
+        <ul class="nav-links">
+            <li><a href="admin-dashboard.html">Dashboard</a></li>
+            <li><a href="manage-users.html">Manage Users</a></li>
+            <li><a href="manage-jobs.html" class="active">Manage Jobs</a></li>
+            <li><a href="manage-transactions.html">Transactions</a></li>
+            <li><a href="resolve-disputes.html">Disputes</a></li>
+            <li><a href="admin-settings.html">Settings</a></li>
+            <li><a href="../logout.php" class="logout">Logout</a></li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <header class="admin-header">
+            <h2>Manage Job Posts</h2>
+        </header>
+
+        <section class="job-table">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Job ID</th>
+                        <th>Title</th>
+                        <th>Client</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="job-list">
+                    <tr><td colspan="5">Loading...</td></tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    fetchJobs();
+});
+
+function fetchJobs() {
+    fetch("php/fetch_jobs.php")
+        .then(response => response.json())
+        .then(data => {
+            let jobList = document.getElementById("job-list");
+            jobList.innerHTML = ""; // Clear table content
+
+            if (!data || data.length === 0) {
+                jobList.innerHTML = "<tr><td colspan='5'>No jobs found.</td></tr>";
+                return;
+            }
+
+            data.forEach(job => {
+                let row = document.createElement("tr");
+
+                row.innerHTML = `
+                    <td>${job.job_id}</td>
+                    <td>${job.title}</td>
+                    <td>${job.client}</td>
+                    <td>${job.status.charAt(0).toUpperCase() + job.status.slice(1)}</td>
+                    <td>
+                        <button class="btn-delete" onclick="deleteJob(${job.job_id})">Delete</button>
+                    </td>
+                `;
+
+                jobList.appendChild(row);
+            });
+        })
+        .catch(error => {
+            console.error("Error fetching jobs:", error);
+            document.getElementById("job-list").innerHTML = "<tr><td colspan='5'>Error loading jobs.</td></tr>";
+        });
+}
+
+function deleteJob(jobId) {
+    if (!confirm("Are you sure you want to delete this job?")) return;
+
+    fetch("php/delete_job.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: `job_id=${jobId}`,
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message);
+            fetchJobs(); // Refresh the table
+        } else {
+            alert("Error: " + data.message);
+        }
+    })
+    .catch(error => {
+        console.error("Delete failed:", error);
+        alert("An error occurred while deleting the job.");
+    });
+}
+
+    </script>
+
+</body>
+</html>

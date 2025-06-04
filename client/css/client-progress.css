@@ -1,0 +1,130 @@
+/* General Container Styles */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  /* Project Progress Section */
+  h2 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #1e3c72;
+  }
+  
+  /* Progress Bar Styling */
+  .progress {
+    height: 30px;
+    border-radius: 5px;
+    background-color: #e9ecef;
+  }
+  
+  .progress-bar {
+    text-align: center;
+    line-height: 30px;
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+  
+  /* Milestone Cards */
+  .milestone-box {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    padding: 20px;
+    transition: box-shadow 0.3s ease-in-out;
+  }
+  
+  .milestone-box:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .milestone-box h5 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .milestone-box p {
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  .milestone-box .status {
+    font-weight: bold;
+    color: #28a745; /* Green for completed */
+  }
+  
+  .milestone-box .status.pending {
+    color: #ffc107; /* Yellow for pending */
+  }
+  
+  .milestone-box .status.in-progress {
+    color: #007bff; /* Blue for in-progress */
+  }
+  
+  /* Milestones Layout */
+  .row {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .col-lg-4, .col-12 {
+    width: 30%;
+    margin-bottom: 20px;
+  }
+  
+  @media (max-width: 768px) {
+    .col-lg-4 {
+      width: 100%;
+    }
+    .row {
+      flex-direction: column;
+    }
+  }
+  
+  /* Loading Text */
+  #milestone-container {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #999;
+  }
+  
+  /* Communication Section */
+  .mt-5 {
+    margin-top: 40px;
+  }
+  
+  .mt-5 h4 {
+    font-size: 1.8rem;
+    font-weight: 600;
+  }
+  
+  .mt-5 p {
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  .btn-primary {
+    background-color: #1e3c72;
+    border-color: #1e3c72;
+    color: #fff;
+  }
+  
+  .btn-primary:hover {
+    background-color: #163a5c;
+    border-color: #163a5c;
+  }
+  
+  /* Footer Styling */
+  footer {
+    background-color: #f8f9fa;
+    color: #777;
+    font-size: 0.9rem;
+  }
+  
+  footer p {
+    margin: 0;
+  }
+  

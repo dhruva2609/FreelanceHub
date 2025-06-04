@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Manage Jobs - Client</title>
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="css/client-manage-jobs.css" />
+  <link rel="stylesheet" href="css/commonc.css" />
+  <script src="js/commonc.js" defer></script>
+</head>
+<body>
+  <!-- Navbar -->
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="client-dashboard.html">Client Panel</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="client-dashboard.html">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="client-post-job.html">Post a Job</a></li>
+          <li class="nav-item"><a class="nav-link" href="client-manage-jobs.html">Manage Jobs</a></li>
+          <li class="nav-item"><a class="nav-link" href="client-proposal-received.html">Proposals</a></li>
+          <li class="nav-item"><a class="nav-link" href="client-project-progress.html">Project Progress</a></li> <!-- Added -->
+          <li class="nav-item"><a class="nav-link" href="client-messages.html">Messages</a></li>
+          <li class="nav-item"><a class="nav-link" href="client-payments.html">Payments</a></li>
+          <li class="nav-item"><a class="nav-link" href="client-settings.html">Settings</a></li>
+          <li class="nav-item"><a class="nav-link logout-btn" href="../logout.php">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Manage Jobs Section -->
+  <div class="container mt-4">
+    <h2 class="text-center">Manage Your Jobs</h2>
+
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Job Title</th>
+          <th>Category</th>
+          <th>Budget</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="job-list">
+        <!-- Jobs will be dynamically inserted here -->
+      </tbody>
+    </table>
+
+    <p id="noJobs" class="text-center text-muted" style="display: none;">No jobs posted yet.</p>
+  </div>
+
+  <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const jobListContainer = document.getElementById('job-list');
+      const noJobs = document.getElementById('noJobs');
+
+      function loadJobs() {
+        fetch('php/fetch_jobs.php')
+          .then(response => response.text())
+          .then(data => {
+            jobListContainer.innerHTML = data;
+            const rows = jobListContainer.querySelectorAll('tr');
+
+            if (rows.length === 0 || !data.trim()) {
+              noJobs.style.display = "block";
+            } else {
+              noJobs.style.display = "none";
+            }
+          })
+          .catch(error => {
+            console.error('Error fetching jobs:', error);
+            noJobs.textContent = "Failed to load jobs.";
+            noJobs.style.display = "block";
+          });
+      }
+
+      loadJobs();
+    });
+  </script>
+</body>
+</html>

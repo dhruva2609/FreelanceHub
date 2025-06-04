@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - FreelanceHub</title>
+    <link rel="stylesheet" href="css/admin-dashboard.css">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="js/admin-dashboard.js" defer></script>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="logo">FreelanceHub <span>Admin</span></div>
+        <ul class="nav-links">
+            <li><a href="admin-dashboard.html" class="active">Dashboard</a></li>
+            <li><a href="manage-users.html">Manage Users</a></li>
+            <li><a href="manage-jobs.html">Manage Jobs</a></li>
+            <li><a href="manage-transactions.html">Transactions</a></li>
+            <li><a href="resolve-disputes.html">Disputes</a></li>
+            <li><a href="admin-settings.html">Settings</a></li>
+            <li><a href="../logout.php" class="logout">Logout</a></li>
+        </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="admin-header">
+            <h2>Admin Dashboard</h2>
+            <div class="admin-profile">
+                <img src="no-profile-picture-icon.webp" alt="Admin">
+                <span>Welcome, Admin</span>
+            </div>
+        </header>
+
+        <section class="dashboard-cards">
+            <div class="card">
+                <h3>Total Users</h3>
+                <p id="total-users">Loading...</p>
+            </div>
+            <div class="card">
+                <h3>Active Jobs</h3>
+                <p id="active-jobs">Loading...</p>
+            </div>
+            <div class="card">
+                <h3>Pending Withdrawals</h3>
+                <p id="pending-withdrawals">Loading...</p>
+            </div>
+            <div class="card">
+                <h3>Open Disputes</h3>
+                <p id="open-disputes">Loading...</p>
+            </div>
+        </section>
+
+        <section class="recent-activity">
+            <h3>Recent Activity</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Action</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody id="activity-log">
+                    <tr><td colspan="3">Loading...</td></tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    fetch("php/admin_dashboard.php")
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("total-users").textContent = data.total_users;
+            document.getElementById("active-jobs").textContent = data.active_jobs;
+            document.getElementById("pending-withdrawals").textContent = data.pending_withdrawals;
+            document.getElementById("open-disputes").textContent = data.open_disputes;
+
+            // Populate recent activity table
+            let activityLog = document.getElementById("activity-log");
+            activityLog.innerHTML = "";
+            data.recent_activity.forEach(activity => {
+                let row = `<tr>
+                    <td>${activity.name}</td>
+                    <td>${activity.content}</td>
+                    <td>${activity.created_at}</td>
+                </tr>`;
+                activityLog.innerHTML += row;
+            });
+        })
+        .catch(error => console.error("Error loading data:", error));
+});
+
+    </script>
+</body>
+</html>

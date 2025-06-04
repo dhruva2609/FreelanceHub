@@ -1,0 +1,42 @@
+.page-container {
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 30px;
+  background: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+h2 {
+  text-align: center;
+  color: #4E73DF;
+  margin-bottom: 20px;
+}
+
+label {
+  font-weight: bold;
+  display: block;
+  margin: 10px 0 5px;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.btn {
+  display: block;
+  width: 100%;
+  margin-top: 15px;
+  background: #4E73DF;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.btn:hover {
+  background: #2E59D9;
+  transform: scale(1.05);
+}

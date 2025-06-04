@@ -1,0 +1,268 @@
+/* ================= Global Reset ================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* ================= Full-Screen Layout ================= */
+html, body {
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    background-color: #F4F6F9; /* Light background */
+    display: flex;
+    flex-direction: column;
+}
+
+/* ================= Container (Main Content) ================= */
+.container {
+    flex: 1; /* Takes full available height */
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center content vertically */
+    overflow-x: hidden; /* Prevent content overflow */
+}
+
+/* ================= Full-Width Sections ================= */
+.full-width-section {
+    width: 100%;
+    min-height: 100vh; /* Full screen height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+/* ================= Headers ================= */
+h1, h2, h3 {
+    font-weight: 600;
+    color: #1e3c72; /* Primary blue */
+    text-align: center;
+    padding: 0 10px; /* Slight horizontal padding to avoid edge clipping */
+}
+
+/* ================= Buttons ================= */
+.btn {
+    display: inline-block;
+    padding: 12px 18px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    background: #1e3c72;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.3s;
+}
+
+.btn:hover {
+    background: #162d56;
+}
+
+/* ================= Forms ================= */
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    word-wrap: break-word; /* Ensure long text wraps */
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #1e3c72;
+    outline: none;
+}
+
+/* ================= Tables ================= */
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    padding: 14px;
+    border: 1px solid #ddd;
+    text-align: left;
+    word-wrap: break-word;
+}
+
+table th {
+    background: #1e3c72;
+    color: #fff;
+}
+
+/* ================= Cards ================= */
+.card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+/* Style for Approve Button */
+button.approve {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+button.approve:hover {
+    background-color: #218838;
+}
+
+/* Style for Reject Button */
+button.reject {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button.reject:hover {
+    background-color: #c82333;
+}
+
+/* Styling Status */
+.status-Pending {
+    color: orange;
+}
+
+.status-Approved {
+    color: green;
+    font-weight: bold;
+}
+
+.status-Rejected {
+    color: red;
+    font-weight: bold;
+}
+
+/* ================= Responsive Design ================= */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
+    table th, table td {
+        padding: 10px;
+    }
+
+    .btn {
+        font-size: 14px;
+        padding: 10px 14px;
+    }
+}
+/* Edit Button */
+button.edit {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+button.edit:hover {
+    background-color: #0056b3;
+}
+
+/* Toggle Status Button */
+button.toggle {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button.toggle.suspend {
+    background-color: #dc3545;
+}
+
+button.toggle:hover {
+    opacity: 0.9;
+}
+
+/* Status Colors */
+.active {
+    color: green;
+    font-weight: bold;
+}
+
+.suspended {
+    color: red;
+    font-weight: bold;
+}
+
+/* Resolve Button */
+button.resolve-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button.resolve-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Status Colors */
+.open {
+    color: red;
+    font-weight: bold;
+}
+
+.resolved {
+    color: green;
+    font-weight: bold;
+}
+
+/* Save Changes Button */
+.settings-form button {
+    background-color: #1e3c72; /* Dark Blue Color */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: background-color 0.3s ease-in-out;
+    margin-top: 15px;
+  }
+  
+  .settings-form button:hover {
+    background-color: #153051; /* Slightly darker blue on hover */
+  }
+  
+  .settings-form button:active {
+    background-color: #10263d; /* Even darker blue on click */
+  }
+  
+  

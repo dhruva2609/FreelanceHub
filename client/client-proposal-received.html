@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proposals Received</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/proposal-received.css">
+    <link rel="stylesheet" href="css/commonc.css">
+    <script src="js/commonc.js" defer></script>
+</head>
+<body>
+
+    <!-- Navbar -->
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="client-dashboard.html">Client Panel</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="client-dashboard.html">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="client-post-job.html">Post a Job</a></li>
+          <li class="nav-item"><a class="nav-link" href="client-manage-jobs.html">Manage Jobs</a></li>
+          <li class="nav-item"><a class="nav-link" href="client-proposal-received.html">Proposals</a></li>
+          <li class="nav-item"><a class="nav-link" href="client-project-progress.html">Project Progress</a></li> <!-- Added -->
+          <li class="nav-item"><a class="nav-link" href="client-messages.html">Messages</a></li>
+          <li class="nav-item"><a class="nav-link" href="client-payments.html">Payments</a></li>
+          <li class="nav-item"><a class="nav-link" href="client-settings.html">Settings</a></li>
+          <li class="nav-item"><a class="nav-link logout-btn" href="../logout.php">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+    <!-- Proposals Section -->
+    <div class="container mt-4">
+        <h2 class="text-center">Proposals Received</h2>
+
+        <p id="noProposals" class="text-center text-muted">No proposals received yet.</p>
+
+        <table class="table table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Proposal ID</th>
+                    <th>Job Title</th>
+                    <th>Freelancer</th>
+                    <th>Proposal</th>
+                    <th>Bid Amount</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="proposal-list">
+                <!-- Dynamic content will be inserted here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- JavaScript to Dynamically Fetch and Show Proposals -->
+    <script>
+     document.addEventListener("DOMContentLoaded", function () {
+    fetch('php/fetch_proposals.php')
+        .then(response => response.json())
+        .then(data => {
+            const proposalList = document.getElementById('proposal-list');
+            const noProposalsMsg = document.getElementById('noProposals');
+
+            proposalList.innerHTML = ""; // Clear existing entries
+
+            if (!Array.isArray(data)) {
+                console.error('Invalid response format:', data);
+                noProposalsMsg.innerText = "Error loading proposals.";
+                noProposalsMsg.style.display = 'block';
+                return;
+            }
+
+            if (data.length === 0) {
+                noProposalsMsg.style.display = 'block';
+            } else {
+                noProposalsMsg.style.display = 'none';
+
+                data.forEach(proposal => {
+                    proposalList.innerHTML += `
+                        <tr>
+                            <td>${proposal.proposal_id}</td>
+                            <td>${proposal.job_title || 'N/A'}</td>
+                            <td>${proposal.freelancer || 'Unknown'}</td>
+                            <td>${proposal.proposal_text}</td>
+                            <td>$${proposal.bid_amount}</td>
+                            <td class="${proposal.status === 'accepted' ? 'text-success' : (proposal.status === 'rejected' ? 'text-danger' : 'text-warning')}">
+                                ${proposal.status.charAt(0).toUpperCase() + proposal.status.slice(1)}
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching proposals:', error);
+            document.getElementById('noProposals').innerText = "Error loading proposals.";
+            document.getElementById('noProposals').style.display = 'block';
+        });
+});
+
+      </script>
+      
+
+</body>
+</html>

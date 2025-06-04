@@ -1,0 +1,45 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #F4F6F9;
+}
+
+/* Earnings Summary Section */
+.earnings-summary {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin: 30px auto;
+    text-align: center;
+}
+
+.card {
+    flex: 1;
+    padding: 20px;
+    background: #4E73DF;
+    color: white;
+    border-radius: 8px;
+}
+
+.card h3 {
+    margin-bottom: 10px;
+}
+
+/* Transaction Table */
+.table {
+    background: white;
+    margin-top: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+
+th {
+    background: #4E73DF !important;
+    color: rgb(255, 255, 255);
+    text-align: center;
+}
+
+td {
+    text-align: center;
+}

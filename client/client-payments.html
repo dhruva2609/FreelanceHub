@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Payments</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/client-payments.css">
+    <link rel="stylesheet" href="css/commonc.css">
+    <script src="js/commonc.js" defer></script>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+          <a class="navbar-brand" href="client-dashboard.html">Client Panel</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item"><a class="nav-link active" href="client-dashboard.html">Dashboard</a></li>
+              <li class="nav-item"><a class="nav-link" href="client-post-job.html">Post a Job</a></li>
+              <li class="nav-item"><a class="nav-link" href="client-manage-jobs.html">Manage Jobs</a></li>
+              <li class="nav-item"><a class="nav-link" href="client-proposal-received.html">Proposals</a></li>
+              <li class="nav-item"><a class="nav-link" href="client-project-progress.html">Project Progress</a></li> <!-- Added -->
+              <li class="nav-item"><a class="nav-link" href="client-messages.html">Messages</a></li>
+              <li class="nav-item"><a class="nav-link" href="client-payments.html">Payments</a></li>
+              <li class="nav-item"><a class="nav-link" href="client-settings.html">Settings</a></li>
+              <li class="nav-item"><a class="nav-link logout-btn" href="../logout.php">Logout</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+    <!-- Payment Overview Section -->
+    <div class="container mt-4">
+        <h2 class="text-center">Payments Overview</h2>
+
+        <div class="earnings-summary">
+            <div class="card">
+                <h3>Total Funds</h3>
+                <p id="totalFunds">$5000</p>
+            </div>
+            <div class="card">
+                <h3>Escrow Funds</h3>
+                <p id="escrowFunds">$2000</p>
+            </div>
+            <div class="card">
+                <h3>Released Payments</h3>
+                <p id="releasedFunds">$3000</p>
+            </div>
+        </div>
+
+        <!-- Transaction History Table -->
+        <h3 class="text-center mt-4">Transaction History</h3>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Freelancer</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="transactionTable">
+                    <tr>
+                        <td>Mar 01, 2025</td>
+                        <td>John Doe</td>
+                        <td>$500</td>
+                        <td class="text-warning">Pending</td>
+                    </tr>
+                    <tr>
+                        <td>Feb 25, 2025</td>
+                        <td>Jane Smith</td>
+                        <td>$800</td>
+                        <td class="text-success">Released</td>
+                    </tr>
+                    <tr>
+                        <td>Feb 15, 2025</td>
+                        <td>Mark Wilson</td>
+                        <td>$1200</td>
+                        <td class="text-danger">Failed</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+    $.ajax({
+        url: "php/fetch_payments.php",
+        type: "GET",
+        dataType: "json",
+        success: function (response) {
+            if (response.error) {
+                alert(response.error);
+                return;
+            }
+
+            let transactionsHTML = "";
+            let totalFunds = 0;
+            let escrowFunds = 0;
+            let releasedFunds = 0;
+
+            response.transactions.forEach(transaction => {
+                const amount = parseFloat(transaction.amount);
+                totalFunds += amount;
+
+                if (transaction.status.toLowerCase() === "pending") {
+                    escrowFunds += amount;
+                } else if (transaction.status.toLowerCase() === "released") {
+                    releasedFunds += amount;
+                }
+
+                transactionsHTML += `<tr>
+                    <td>${transaction.transaction_date}</td>
+                    <td>${transaction.freelancer || transaction.client}</td>
+                    <td>$${amount.toFixed(2)}</td>
+                    <td class="${getStatusClass(transaction.status)}">${transaction.status}</td>
+                </tr>`;
+            });
+
+            $("#transactionTable").html(transactionsHTML);
+            $("#totalFunds").text(`$${totalFunds.toFixed(2)}`);
+            $("#escrowFunds").text(`$${escrowFunds.toFixed(2)}`);
+            $("#releasedFunds").text(`$${releasedFunds.toFixed(2)}`);
+        },
+        error: function () {
+            alert("Failed to fetch transactions.");
+        }
+    });
+
+    function getStatusClass(status) {
+        switch (status.toLowerCase()) {
+            case 'pending': return 'text-warning';
+            case 'released': return 'text-success';
+            case 'failed': return 'text-danger';
+            default: return 'text-muted';
+        }
+    }
+});
+
+    </script>
+
+    <script src="js/client-payments.js"></script>
+
+</body>
+</html>

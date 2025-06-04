@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Resolve Disputes - FreelanceHub Admin</title>
+  <link rel="stylesheet" href="css/admin-dashboard.css">
+  <link rel="stylesheet" href="css/common.css">
+</head>
+<body>
+
+  <aside class="sidebar">
+    <div class="logo">FreelanceHub <span>Admin</span></div>
+    <ul class="nav-links">
+      <li><a href="admin-dashboard.html">Dashboard</a></li>
+      <li><a href="manage-users.html">Manage Users</a></li>
+      <li><a href="manage-jobs.html">Manage Jobs</a></li>
+      <li><a href="manage-transactions.html">Transactions</a></li>
+      <li><a href="resolve-disputes.html" class="active">Disputes</a></li>
+      <li><a href="admin-settings.html">Settings</a></li>
+      <li><a href="../logout.php" class="logout">Logout</a></li>
+    </ul>
+  </aside>
+
+  <main class="main-content">
+    <header class="admin-header">
+      <h2>Resolve Disputes</h2>
+    </header>
+
+    <section class="dispute-table">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Job Title</th>
+            <th>Freelancer</th>
+            <th>Client</th>
+            <th>Reason</th>
+            <th>Status</th>
+            <th>Created At</th>
+          </tr>
+        </thead>
+        <tbody id="disputeBody">
+          <tr><td colspan="7">Loading...</td></tr>
+        </tbody>
+      </table>
+      <!-- <div id="noDisputes" class="no-data d-none">No disputes found.</div> -->
+    </section>
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+  fetchDisputes();
+});
+
+function fetchDisputes() {
+  fetch('php/fetch_disputes.php')
+    .then(response => response.json())
+    .then(data => {
+      const body = document.getElementById('disputeBody');
+      const noDisputes = document.getElementById('noDisputes');
+      body.innerHTML = ''; // Clear table first
+
+      if (data.success && data.data.length > 0) {
+        data.data.forEach(dispute => {
+          const row = document.createElement('tr');
+
+          row.innerHTML = `
+            <td>${dispute.dispute_id}</td>
+            <td>${dispute.job_title}</td>
+            <td>${dispute.raised_by_name}</td>
+            <td>${dispute.against_name}</td>
+            <td>${dispute.dispute_reason}</td>
+            <td><span class="badge bg-${getStatusColor(dispute.status)} badge-status">${dispute.status}</span></td>
+            <td>${new Date(dispute.created_at).toLocaleString()}</td>
+          `;
+          body.appendChild(row);
+        });
+      } else {
+        noDisputes.classList.remove('d-none');
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching disputes:', error);
+    });
+}
+
+function getStatusColor(status) {
+  switch (status) {
+    case 'open': return 'warning';
+    case 'under_review': return 'info';
+    case 'resolved': return 'success';
+    case 'rejected': return 'danger';
+    default: return 'secondary';
+  }
+}
+
+  </script>
+
+</body>
+</html>

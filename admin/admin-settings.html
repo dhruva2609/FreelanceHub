@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Settings - FreelanceHub Admin</title>
+    <link rel="stylesheet" href="css/admin-dashboard.css">
+    <link rel="stylesheet" href="css/common.css">
+    <script src="js/admin-settings.js" defer></script>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="logo">FreelanceHub <span>Admin</span></div>
+        <ul class="nav-links">
+            <li><a href="admin-dashboard.html">Dashboard</a></li>
+            <li><a href="manage-users.html">Manage Users</a></li>
+            <li><a href="manage-jobs.html">Manage Jobs</a></li>
+            <li><a href="manage-transactions.html">Transactions</a></li>
+            <li><a href="resolve-disputes.html">Disputes</a></li>
+            <li><a href="admin-settings.html" class="active">Settings</a></li>
+            <li><a href="../logout.php" class="logout">Logout</a></li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <header class="admin-header">
+            <h2>Admin Settings</h2>
+        </header>
+
+        <section class="settings-form">
+            <form id="settings-form">
+                <label>Admin Name:</label>
+                <input type="text" id="admin-name" placeholder="Admin Name">
+            
+                <label>Email:</label>
+                <input type="email" id="admin-email" placeholder="admin@example.com">
+            
+                <label>New Password:</label>
+                <input type="password" id="admin-password" placeholder="Enter new password">
+            
+                <button type="submit">Save Changes</button>
+            </form>            
+        </section>
+    </main>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    const settingsForm = document.getElementById("settings-form");
+
+    // Fetch admin details when the page loads
+    fetch("php/admin_settings.php", {
+        method: "GET",
+        credentials: "include"
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            alert("Error: " + data.error);
+        } else {
+            document.getElementById("admin-name").value = data.name;
+            document.getElementById("admin-email").value = data.email;
+        }
+    })
+    .catch(error => console.error("Fetch error:", error));
+
+    // Handle form submission
+    settingsForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const name = document.getElementById("admin-name").value.trim();
+        const email = document.getElementById("admin-email").value.trim();
+        const password = document.getElementById("admin-password").value.trim();
+
+        if (!name || !email) {
+            alert("Name and Email are required.");
+            return;
+        }
+
+        fetch("php/admin_settings.php", {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, email, password })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert("Error: " + data.error);
+            } else {
+                alert("Settings updated successfully!");
+                location.reload(); // Refresh page to reflect changes
+            }
+        })
+        .catch(error => console.error("Error updating settings:", error));
+    });
+});
+
+    </script>
+</body>
+</html>
