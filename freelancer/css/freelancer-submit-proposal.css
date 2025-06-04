@@ -1,0 +1,72 @@
+/* General Page Styles */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  h2 {
+    color: #1e3c72;
+    font-weight: bold;
+  }
+  
+  /* Card Styles */
+  .card {
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(30, 60, 114, 0.05);
+  }
+  
+  /* Form Labels */
+  label {
+    font-weight: 500;
+    color: #333;
+  }
+  
+  /* Inputs and Textareas */
+  input[type="text"],
+  input[type="number"],
+  textarea,
+  select {
+    border-radius: 10px;
+    border: 1px solid #ced4da;
+    transition: border 0.3s ease;
+  }
+  
+  input:focus,
+  textarea:focus,
+  select:focus {
+    border-color: #1e3c72;
+    box-shadow: 0 0 0 0.2rem rgba(30, 60, 114, 0.25);
+  }
+  
+  /* File Upload Input */
+  input[type="file"] {
+    border-radius: 10px;
+    padding: 8px;
+    background-color: #f1f1f1;
+  }
+  
+  /* Button Styles */
+  .btn-success {
+    background-color: #1e3c72;
+    border: none;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-success:hover {
+    background-color: #163060;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .container {
+      padding: 1rem;
+    }
+  
+    h2 {
+      font-size: 1.5rem;
+    }
+  }
+  

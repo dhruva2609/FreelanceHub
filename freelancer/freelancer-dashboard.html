@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Freelancer Dashboard</title>
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/freelancer-dashboard.css">
+  <link rel="stylesheet" href="css/commonf.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <!-- Navigation -->
+<nav class="navbar navbar-expand-lg">
+  <div class="container">
+    <a class="navbar-brand" href="freelancer-dashboard.html">Freelancer Panel</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link active" href="freelancer-dashboard.html">Dashboard</a></li>
+        
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="findWorkDropdown" role="button" data-bs-toggle="dropdown">Find Work</a>
+          <ul class="dropdown-menu" aria-labelledby="findWorkDropdown">
+            <li><a class="dropdown-item" href="freelancer-jobs.html">Browse Jobs</a></li>
+            <li><a class="dropdown-item" href="saved-jobs.html">Saved Jobs</a></li>
+          </ul>
+        </li>
+        
+        <li class="nav-item"><a class="nav-link" href="freelancer-proposals.html">Proposals</a></li>
+        <li class="nav-item"><a class="nav-link" href="freelancer-messages.html">Messages</a></li>
+
+        <!-- New Projects Dropdown -->
+        <li class="nav-item"><a class="nav-link active" href="freelancer-progress.html">Progress</a></li>
+
+        <li class="nav-item"><a class="nav-link" href="freelancer-earnings.html">Earnings</a></li>
+        <li class="nav-item"><a class="nav-link" href="freelancer-settings.html">Settings</a></li>
+        <li class="nav-item"><a class="nav-link logout-btn" href="../logout.php">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+  <!-- Main Content -->
+  <main class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center">
+      <h2>Dashboard</h2>
+      <button class="btn btn-primary"><a href="freelancer-proposals.html" class="text-white text-decoration-none">+ New Proposal</a></button>
+    </div>
+
+    <!-- Dashboard Stats -->
+    <div class="row mt-4">
+      <div class="col-md-3">
+        <div class="card stat-card">
+          <h5><a href="freelancer-earnings.html">Current Earnings</a></h5>
+          <p id="earnings">$0.00</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card stat-card">
+          <h5><a href="freelancer-progress.html">Ongoing Projects</a></h5>
+          <p id="ongoing-projects">0</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card stat-card">
+          <h5><a href="freelancer-messages.html">New Messages</a></h5>
+          <p id="new-messages">0</p>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card stat-card">
+          <h5>Completed Projects</h5>
+          <p id="completed-projects">0</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Jobs & Proposals -->
+    <div class="row mt-4">
+      <div class="col-md-6">
+        <h4>Recent Job Listings</h4>
+        <ul class="list-group">
+          <li class="list-group-item">Web Developer Needed <span class="badge bg-success">High Pay</span></li>
+          <li class="list-group-item">Graphic Designer <span class="badge bg-warning">Urgent</span></li>
+          <li class="list-group-item">SEO Specialist <span class="badge bg-primary">Remote</span></li>
+        </ul>
+      </div>
+      <div class="col-md-6">
+        <h4>Active Proposals</h4>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Job</th>
+              <th>Budget</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Landing Page Development</td>
+              <td>$500</td>
+              <td><span class="badge bg-info">Pending</span></td>
+            </tr>
+            <tr>
+              <td>Logo Design</td>
+              <td>$250</td>
+              <td><span class="badge bg-success">Accepted</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Bootstrap JS -->
+  <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="js/freelancer-dashboard.js"></script>
+  <script src="js/commonf.js"></script>
+
+  <!-- Dynamic Stats Update -->
+  <script>
+    // Fetch dashboard stats
+    fetch('php/fetch_dashboard.php')
+    .then(response => response.json())
+    .then(data => {
+        // Update the DOM elements with the fetched data
+        document.getElementById('earnings').textContent = `$${data.earnings}`;
+        document.getElementById('ongoing-projects').textContent = data.ongoing;
+        document.getElementById('new-messages').textContent = data.messages;
+        document.getElementById('completed-projects').textContent = data.completed;
+    })
+    .catch(error => console.error('Error fetching dashboard data:', error));
+  
+    // Fetch active proposals
+    fetch("php/fetch_proposals.php")
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && Array.isArray(data.proposals)) {
+          const tbody = document.querySelector("table tbody");
+          tbody.innerHTML = ""; // Clear existing rows
+  
+          data.proposals.forEach(proposal => {
+            const row = document.createElement("tr");
+  
+            const jobCell = document.createElement("td");
+            jobCell.textContent = proposal.job_title;
+  
+            const budgetCell = document.createElement("td");
+            budgetCell.textContent = `$${proposal.bid_amount}`;
+  
+            const statusCell = document.createElement("td");
+            const statusBadge = document.createElement("span");
+            statusBadge.className = "badge";
+            switch (proposal.status.toLowerCase()) {
+              case "pending":
+                statusBadge.classList.add("bg-info");
+                break;
+              case "accepted":
+                statusBadge.classList.add("bg-success");
+                break;
+              case "rejected":
+                statusBadge.classList.add("bg-danger");
+                break;
+              default:
+                statusBadge.classList.add("bg-secondary");
+                break;
+            }
+            statusBadge.textContent = proposal.status.charAt(0).toUpperCase() + proposal.status.slice(1);
+            statusCell.appendChild(statusBadge);
+  
+            row.appendChild(jobCell);
+            row.appendChild(budgetCell);
+            row.appendChild(statusCell);
+  
+            tbody.appendChild(row);
+          });
+        }
+      })
+      .catch(err => console.error("Failed to fetch proposals:", err));
+  </script>
+  
+  
+</body>
+</html>

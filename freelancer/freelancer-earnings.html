@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earnings</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/commonf.css">
+    <link rel="stylesheet" href="css/freealancer-earnings.css">
+    <script src="js/freealancer-earnings.js"></script>
+    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="js/commonf.js"></script>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+          <a class="navbar-brand" href="freelancer-dashboard.html">Freelancer Panel</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item"><a class="nav-link active" href="freelancer-dashboard.html">Dashboard</a></li>
+              
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="findWorkDropdown" role="button" data-bs-toggle="dropdown">Find Work</a>
+                <ul class="dropdown-menu" aria-labelledby="findWorkDropdown">
+                  <li><a class="dropdown-item" href="freelancer-jobs.html">Browse Jobs</a></li>
+                  <li><a class="dropdown-item" href="saved-jobs.html">Saved Jobs</a></li>
+                </ul>
+              </li>
+              
+              <li class="nav-item"><a class="nav-link" href="freelancer-proposals.html">Proposals</a></li>
+              <li class="nav-item"><a class="nav-link" href="freelancer-messages.html">Messages</a></li>
+      
+              <!-- New Projects Dropdown -->
+              <li class="nav-item"><a class="nav-link active" href="freelancer-progress.html">Progress</a></li>
+
+      
+              <li class="nav-item"><a class="nav-link" href="freelancer-earnings.html">Earnings</a></li>
+              <li class="nav-item"><a class="nav-link" href="freelancer-settings.html">Settings</a></li>
+              <li class="nav-item"><a class="nav-link logout-btn" href="../logout.php">Logout</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      
+      
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <h2>Earnings Overview</h2>
+        <div class="earnings-summary">
+            <div class="card">
+                <h3>Total Earnings</h3>
+                <p id="total-earnings">$0.00</p>
+            </div>
+            <div class="card">
+                <h3>Pending Payments</h3>
+                <p id="pending-payments">$0.00</p>
+            </div>
+            <div class="card">
+                <h3>Available for Withdrawal</h3>
+                <p id="available-balance">$0.00</p>
+            </div>
+        </div>
+
+        <h2>Transaction History</h2>
+        <table id="transaction-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Client</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Transactions will be added dynamically -->
+            </tbody>
+        </table>
+    </div>
+    <script>
+     document.addEventListener("DOMContentLoaded", function () {
+    fetch("php/fetch_earnings.php")
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                console.error("Error:", data.error);
+                document.querySelector(".container").innerHTML = `<p class="text-danger">${data.error}</p>`;
+                return;
+            }
+
+            // Display earnings summary
+            document.getElementById("total-earnings").textContent = `$${data.total_earnings}`;
+            document.getElementById("pending-payments").textContent = `$${data.pending_payments}`;
+            document.getElementById("available-balance").textContent = `$${data.available_balance}`;
+
+            // Populate transaction history table
+            const tableBody = document.querySelector("#transaction-table tbody");
+            tableBody.innerHTML = ""; // Clear existing data
+
+            if (data.transactions.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">No transactions found.</td></tr>`;
+            } else {
+                data.transactions.forEach(tx => {
+                    let row = `<tr>
+                        <td>${tx.transaction_date}</td>
+                        <td>${tx.client_name}</td>
+                        <td>$${tx.amount}</td>
+                        <td>${tx.status}</td>
+                    </tr>`;
+                    tableBody.innerHTML += row;
+                });
+            }
+        })
+        .catch(error => console.error("Fetch error:", error));
+});
+
+
+      </script>
+      
+    
+</body>
+</html>

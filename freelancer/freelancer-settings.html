@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Freelancer Settings</title>
+  <!-- Load Bootstrap CSS first -->
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <!-- Global Common CSS (for navbar and global styles) -->
+  <link rel="stylesheet" href="css/commonf.css">
+  <!-- Page-specific CSS -->
+  <link rel="stylesheet" href="css/freealancer-settings.css">
+</head>
+<body>
+  <!-- Navbar (same markup on all pages) -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="freelancer-dashboard.html">Freelancer Panel</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="freelancer-dashboard.html">Dashboard</a></li>
+          
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="findWorkDropdown" role="button" data-bs-toggle="dropdown">Find Work</a>
+            <ul class="dropdown-menu" aria-labelledby="findWorkDropdown">
+              <li><a class="dropdown-item" href="freelancer-jobs.html">Browse Jobs</a></li>
+              <li><a class="dropdown-item" href="saved-jobs.html">Saved Jobs</a></li>
+            </ul>
+          </li>
+          
+          <li class="nav-item"><a class="nav-link" href="freelancer-proposals.html">Proposals</a></li>
+          <li class="nav-item"><a class="nav-link" href="freelancer-messages.html">Messages</a></li>
+  
+          <!-- New Projects Dropdown -->
+          <li class="nav-item"><a class="nav-link active" href="freelancer-progress.html">Progress</a></li>
+
+  
+          <li class="nav-item"><a class="nav-link" href="freelancer-earnings.html">Earnings</a></li>
+          <li class="nav-item"><a class="nav-link" href="freelancer-settings.html">Settings</a></li>
+          <li class="nav-item"><a class="nav-link logout-btn" href="../logout.php">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+  
+  <!-- Settings Form -->
+  <div class="container settings-container">
+    <h2>Account Settings</h2>
+    <form id="settings-form">
+      <div class="form-group">
+        <label for="fullname">Full Name</label>
+        <input type="text" id="fullname" class="form-control" value="John Doe" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" class="form-control" value="johndoe@example.com" required>
+      </div>
+      <div class="form-group">
+        <label for="password">New Password</label>
+        <input type="password" id="password" class="form-control" placeholder="Enter new password">
+      </div>
+      <div class="form-group">
+        <label for="notifications">Email Notifications</label>
+        <select id="notifications" class="form-select">
+          <option value="enabled" selected>Enabled</option>
+          <option value="disabled">Disabled</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+  </div>
+
+  <!-- Scripts -->
+  <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="js/commonf.js"></script>
+  <script src="js/freelancer-settings.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+    fetch("php/freelancer_settings.php")
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById("fullname").value = data.name;
+            document.getElementById("email").value = data.email;
+            document.getElementById("notifications").value = data.notifications;
+        })
+        .catch(error => console.error("Error fetching freelancer settings:", error));
+});
+
+  </script>
+</body>
+</html>

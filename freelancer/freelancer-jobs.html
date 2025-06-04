@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Browse Jobs</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/freelancer-jobs.css" />
+    <link rel="stylesheet" href="css/commonf.css" />
+    <script src="bootstrap/js/bootstrap.bundle.min.js" defer></script>
+    <script src="js/commonf.js" defer></script>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="freelancer-dashboard.html">Freelancer Panel</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="freelancer-dashboard.html">Dashboard</a></li>
+          
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="findWorkDropdown" role="button" data-bs-toggle="dropdown">Find Work</a>
+            <ul class="dropdown-menu" aria-labelledby="findWorkDropdown">
+              <li><a class="dropdown-item" href="freelancer-jobs.html">Browse Jobs</a></li>
+              <li><a class="dropdown-item" href="saved-jobs.html">Saved Jobs</a></li>
+            </ul>
+          </li>
+          
+          <li class="nav-item"><a class="nav-link" href="freelancer-proposals.html">Proposals</a></li>
+          <li class="nav-item"><a class="nav-link" href="freelancer-messages.html">Messages</a></li>
+  
+          <!-- New Projects Dropdown -->
+          <li class="nav-item"><a class="nav-link active" href="freelancer-progress.html">Progress</a></li>
+
+  
+          <li class="nav-item"><a class="nav-link" href="freelancer-earnings.html">Earnings</a></li>
+          <li class="nav-item"><a class="nav-link" href="freelancer-settings.html">Settings</a></li>
+          <li class="nav-item"><a class="nav-link logout-btn" href="../logout.php">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+  
+
+<!-- Main Content -->
+<main class="container mt-4">
+    <h2 class="mb-4">Browse Jobs</h2>
+
+    <!-- Filter Section -->
+    <div class="row g-3">
+        <div class="col-md-4">
+            <input type="text" class="form-control" id="searchJob" placeholder="Search for jobs..." />
+        </div>
+        <div class="col-md-3">
+            <select class="form-select" id="jobCategory">
+                <option selected value="">All Categories</option>
+                <option value="Web Development">Web Development</option>
+                <option value="Graphic Design">Graphic Design</option>
+                <option value="Content Writing">Content Writing</option>
+                <option value="Marketing">Marketing</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary w-100" onclick="filterJobs()">Filter</button>
+        </div>
+    </div>
+
+    <!-- Job Listings -->
+    <div class="row mt-4" id="jobList">
+        <!-- Jobs will be dynamically inserted here -->
+    </div>
+</main>
+
+<!-- Proposal Form Modal -->
+<div id="proposalFormContainer" class="modal fade" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content" id="proposalContent">
+      <!-- Form content loads dynamically here -->
+    </div>
+  </div>
+</div>
+
+<script>
+    function saveJob(job_id) {
+        const formData = new FormData();
+        formData.append("job_id", job_id);
+    
+        fetch("php/save_job.php", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert("✅ " + data.message);
+            } else {
+                alert("⚠️ " + data.message);
+            }
+        })
+        .catch(error => {
+            console.error("Error saving job:", error);
+            alert("❌ An error occurred while saving the job.");
+        });
+    }
+    
+    // ✅ Open proposal form via redirection instead of modal
+    function openProposalForm(jobId) {
+        window.location.href = `freelancer-submit-proposal.html?job_id=${jobId}`;
+    }
+    
+    // 🚀 Submit proposal to backend
+    function submitProposal(event, jobId) {
+        event.preventDefault();
+    
+        const proposalText = document.getElementById("proposal_text").value;
+        const bidAmount = document.getElementById("bid_amount").value;
+    
+        const formData = new FormData();
+        formData.append("job_id", jobId);
+        formData.append("proposal_text", proposalText);
+        formData.append("bid_amount", bidAmount);
+    
+        fetch("php/submit_proposal.php", {
+            method: "POST",
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            alert(data.message);
+            if (data.success) {
+                document.getElementById("proposalContent").innerHTML = `
+                    <div class="alert alert-success">✅ Proposal submitted successfully!</div>
+                `;
+            }
+        })
+        .catch(err => {
+            console.error("Proposal submission error:", err);
+            alert("❌ Error submitting proposal.");
+        });
+    }
+    
+    // 🔍 Fetch and display jobs
+    function fetchJobs(query = '', category = '') {
+        let url = 'php/fetch_jobs.php?';
+        if (query) url += `query=${encodeURIComponent(query)}&`;
+        if (category) url += `category=${encodeURIComponent(category)}&`;
+        if (url.endsWith('&')) url = url.slice(0, -1);
+    
+        fetch(url)
+            .then(response => response.json())
+            .then(jobs => {
+                const jobList = document.getElementById("jobList");
+                jobList.innerHTML = "";
+    
+                if (jobs.length === 0) {
+                    jobList.innerHTML = "<p class='text-muted'>No open jobs available.</p>";
+                    return;
+                }
+    
+                jobs.forEach(job => {
+                    const jobCard = `
+                        <div class="col-md-6">
+                            <div class="card job-card p-3 mb-3 shadow-sm">
+                                <h5 class="card-title">${job.title}</h5>
+                                <p><strong>Category:</strong> ${job.category}</p>
+                                <p><strong>Client:</strong> ${job.client_name}</p>
+                                <p><strong>Budget:</strong> $${parseFloat(job.budget).toFixed(2)}</p>
+                                <p><strong>Description:</strong> ${job.description}</p>
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-primary" onclick="openProposalForm(${job.job_id})">Apply Now</button>
+                                    <button class="btn btn-outline-success" onclick="saveJob(${job.job_id})">Save Job</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    jobList.innerHTML += jobCard;
+                });
+            })
+            .catch(error => {
+                console.error("Error fetching jobs:", error);
+                document.getElementById("jobList").innerHTML = "<p class='text-danger'>Failed to load jobs.</p>";
+            });
+    }
+    
+    function filterJobs() {
+        const query = document.getElementById("searchJob").value;
+        const category = document.getElementById("jobCategory").value;
+        fetchJobs(query, category);
+    }
+    
+    window.onload = function() {
+        fetchJobs();
+    };
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,117 @@
+:root {
+  --navbar-height: 70px;
+}
+/* Global Styles */
+body {
+    background-color: #F4F6F9;
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    padding-top: var(--navbar-height);
+  }
+  a {
+    text-decoration: none;
+  }
+  
+  /* Animations */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  
+  /* Button Styles */
+  .btn-primary {
+    background-color: #4E73DF;
+    border: none;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  .btn-primary:hover {
+    background-color: #2E59D9;
+    transform: scale(1.05);
+  }
+  
+  /* Card & Stat Styles */
+  .card.stat-card {
+    border: none;
+    border-radius: 12px;
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+    animation: fadeInUp 0.8s ease;
+    margin-right:10px;
+  }
+  .card.stat-card:hover {
+    transform: scale(1.02);
+    transition: transform 0.3s ease;
+  }
+  .card.stat-card h5 {
+    color: #4E73DF;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+  
+  /* Chart Container */
+  .chart-container {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+    margin-bottom: 20px;
+    animation: fadeInUp 0.8s ease;
+  }
+  
+  /* List Group Styles */
+  .list-group-item {
+    border: none;
+    border-bottom: 1px solid #eaeaea;
+    background-color: #fff;
+    animation: fadeInUp 0.8s ease;
+  }
+  .list-group-item:last-child {
+    border-bottom: none;
+  }
+  
+  /* Table Styles */
+  .table {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    animation: fadeInUp 0.8s ease;
+  }
+  .table th{
+    vertical-align: middle;
+    border: none;
+    color:white;
+  }
+  .table td {
+    vertical-align: middle;
+    border: none;
+  }
+  .table th {
+    background-color:#4E73DF;
+  }
+  p{
+    color: black;
+  }
+  /* Headings */
+  h2, h4 {
+    color: #4E73DF;
+    font-weight: 600;
+    margin-bottom: 20px;
+    animation: fadeInUp 0.8s ease;
+  }
+  .btn a{
+    color: white;
+    text-decoration: none; 
+}

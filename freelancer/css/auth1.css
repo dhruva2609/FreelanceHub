@@ -1,0 +1,97 @@
+/* Login Page Styles */
+body{
+    background-color: #2E59D9;
+}
+.auth-container {
+    max-width: 400px;
+    margin: 80px auto;
+    padding: 30px;
+    background: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    text-align: center;
+}
+
+.auth-container h2 {
+    color: #2E59D9;
+    margin-bottom: 20px;
+}
+
+.auth-container label {
+    display: block;
+    text-align: left;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.auth-container input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.password-container {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.options {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+    font-size: 14px;
+}
+
+.options a {
+    color: #2E59D9;
+    text-decoration: none;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background:#2E59D9;
+    color: white;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+button:hover {
+    background:#fff;
+    border: #2E59D9 1px solid;
+    color: #2E59D9;
+}
+
+.social-login {
+    margin-top: 15px;
+}
+
+.google-btn {
+    background: white;
+    color: #2E59D9;
+    border: 1px solid #2E59D9;
+}
+
+.google-btn:hover {
+    background: #2E59D9;
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+    .auth-container {
+        width: 90%;
+    }
+}

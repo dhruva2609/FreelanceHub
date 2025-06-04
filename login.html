@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Login | FreelanceHub</title>
+  <link rel="stylesheet" href="auth.css" />
+</head>
+<body>
+
+  <section class="auth-container">
+    <h2>Login to FreelanceHub</h2>
+
+    <div style="color:red;" id="error-msg">
+      <!-- Error will show here -->
+    </div>
+
+    <form id="login-form">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+      <label for="password">Password</label>
+      <div class="password-container">
+        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+        <span class="toggle-password" onclick="togglePassword()">👁️</span>
+      </div>
+
+      <div class="options">
+        <label><input type="checkbox" id="rememberMe"> Remember me</label>
+        <a href="forgot-password.html">Forgot Password?</a>
+      </div>
+
+      <button type="submit">Login</button>
+
+      <div class="social-login">
+        <p>Or log in with:</p>
+        <button type="button" class="google-btn" onclick="loginWithGoogle()">🔵 Login with Google</button>
+      </div>
+
+      <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
+    </form>
+  </section>
+
+  <script>
+    document.getElementById("login-form").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const form = e.target;
+  const formData = new FormData(form);
+
+  // Open a blank window to write dashboard later
+  const loginTab = window.open('', '_blank');
+
+  fetch('login.php', {
+    method: 'POST',
+    body: formData
+  })
+  .then(res => res.text())
+  .then(response => {
+    loginTab.document.open();
+    loginTab.document.write(response); // this will show dashboard or JS in new tab
+    loginTab.document.close();
+
+    // ✅ Reset the login form after successful login
+    form.reset();
+  })
+  .catch(err => {
+    document.getElementById("error-msg").innerText = "❌ Login failed. Try again.";
+    loginTab.close();
+  });
+});
+
+  </script>
+
+</body>
+</html>

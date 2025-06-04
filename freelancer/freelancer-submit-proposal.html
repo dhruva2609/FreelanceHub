@@ -1,0 +1,140 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Submit Proposal</title>
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="css/commonf.css" />
+  <link rel="stylesheet" href="css/freelancer-submit-proposal.css" />
+  <script src="bootstrap/js/bootstrap.bundle.min.js" defer></script>
+  <style>
+    body {
+      background-color: #f4f7fc;
+      color: #333;
+    }
+  
+    h2, .card-title {
+      color: #4E73DF;
+    }
+  
+    .card {
+      border: 1px solid #4E73DF;
+      box-shadow: 0 2px 8px rgba(78, 115, 223, 0.1);
+    }
+  
+    /* ✅ Fix card text color */
+    .card-body p,
+    .card-body span {
+      color: #1e2d55; /* Deep blue-gray for readability */
+    }
+  
+    .form-label {
+      color: #4E73DF;
+      font-weight: 500;
+    }
+  
+    .btn-success {
+      background-color: #4E73DF;
+      border-color: #4E73DF;
+    }
+  
+    .btn-success:hover {
+      background-color: #3e5bc0;
+      border-color: #3e5bc0;
+    }
+  
+    .form-control:focus,
+    .form-select:focus {
+      border-color: #4E73DF;
+      box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+    }
+  </style>
+  
+</head>
+<body>
+  <!-- Navbar (optional include) -->
+
+  <div class="container mt-5">
+    <h2 class="mb-4">Submit Proposal</h2>
+
+    <!-- Job Summary -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title" id="jobTitle">Loading...</h5>
+        <p><strong>Budget:</strong> $<span id="jobBudget">-</span></p>
+        <p><strong>Category:</strong> <span id="jobCategory">-</span></p>
+        <p><strong>Description:</strong> <span id="jobDescription">Loading job description...</span></p>
+      </div>
+    </div>
+
+    <!-- Proposal Form -->
+    <form id="proposalForm" enctype="multipart/form-data" method="post" action="php/submit-proposal.php">
+      <input type="hidden" name="job_id" id="hiddenJobId" value="" />
+
+      <div class="mb-3">
+        <label for="coverLetter" class="form-label">Cover Letter</label>
+        <textarea name="cover_letter" class="form-control" id="coverLetter" rows="5" required></textarea>
+      </div>
+
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <label for="amount" class="form-label">Your Bid ($)</label>
+          <input type="number" class="form-control" name="bid_amount" id="amount" required />
+        </div>
+        <div class="col-md-4 mb-3">
+          <label for="deliveryTime" class="form-label">Delivery Time</label>
+          <div class="input-group">
+            <input type="number" name="delivery_time" class="form-control" id="deliveryTime" required />
+            <select name="time_unit" class="form-select">
+              <option value="days">Days</option>
+              <option value="weeks">Weeks</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-4 mb-3">
+          <label for="attachment" class="form-label">Attachment (optional)</label>
+          <input type="file" class="form-control" name="attachment" id="attachment" />
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-success w-100">Submit Proposal</button>
+    </form>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const jobId = urlParams.get("job_id");
+
+      if (!jobId) {
+        alert("❌ No job ID provided.");
+        return;
+      }
+
+      // Set hidden input
+      document.getElementById("hiddenJobId").value = jobId;
+
+      // Fetch job details
+      fetch(`php/get_job_details.php?job_id=${jobId}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            const job = data.job;
+            document.getElementById("jobTitle").textContent = job.title;
+            document.getElementById("jobBudget").textContent = parseFloat(job.budget).toFixed(2);
+            document.getElementById("jobCategory").textContent = job.category;
+            document.getElementById("jobDescription").textContent = job.description;
+          } else {
+            alert("⚠️ " + data.message);
+          }
+        })
+        .catch(err => {
+          console.error("Error loading job details:", err);
+          alert("❌ Failed to load job details.");
+        });
+    });
+  </script>
+
+</body>
+</html>

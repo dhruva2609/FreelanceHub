@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chat</title>
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="css/freealancer-messages.css" />
+  <link rel="stylesheet" href="css/commonf.css" />
+  <style>
+    html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #e9edf3;
+}
+
+/* Chat wrapper under navbar */
+.chat-wrapper {
+  display: flex;
+  height: calc(100vh - 70px);
+  overflow: hidden;
+  margin-top: 70px;
+  border-top: 1px solid #ccc;
+}
+
+/* Sidebar for chat list */
+.sidebar {
+  width: 260px;
+  background: #4E73DF;
+  color: white;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.sidebar .chat-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar .chat-list li {
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  margin-bottom: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.sidebar .chat-list li:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Chat main area */
+.chat-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  box-shadow: inset 1px 0 0 #ddd;
+}
+
+/* Chat header */
+.chat-header {
+  padding: 1rem 1.5rem;
+  background-color: #4E73DF;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border-bottom: 1px solid #4E73DF;
+}
+
+/* Messages container */
+.chat-messages {
+  flex: 1;
+  padding: 1rem 1.5rem;
+  overflow-y: auto;
+  background-color: #f7f9fc;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Individual messages */
+.message {
+  max-width: 60%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  position: relative;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.message.sender {
+  align-self: flex-end;
+  background-color: #4E73DF;
+  color: white;
+  border-bottom-right-radius: 0;
+}
+
+.message.receiver {
+  align-self: flex-start;
+  background-color: #e0e7f5;
+  color: #333;
+  border-bottom-left-radius: 0;
+}
+
+.message small {
+  display: block;
+  font-size: 0.75rem;
+  color: #ccc;
+  margin-top: 5px;
+}
+
+/* Message input area */
+.chat-input {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #ccc;
+  background: white;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 0.6rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  outline: none;
+  font-size: 1rem;
+}
+
+.chat-input button {
+  padding: 0.6rem 1.5rem;
+  background-color: #4E73DF;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-weight: 500;
+  transition: background 0.3s;
+}
+
+.chat-input button:hover {
+  background-color: #4E73DF;
+  cursor: pointer;
+}
+
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="freelancer-dashboard.html">Freelancer Panel</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="freelancer-dashboard.html">Dashboard</a></li>
+          
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="findWorkDropdown" role="button" data-bs-toggle="dropdown">Find Work</a>
+            <ul class="dropdown-menu" aria-labelledby="findWorkDropdown">
+              <li><a class="dropdown-item" href="freelancer-jobs.html">Browse Jobs</a></li>
+              <li><a class="dropdown-item" href="saved-jobs.html">Saved Jobs</a></li>
+            </ul>
+          </li>
+          
+          <li class="nav-item"><a class="nav-link" href="freelancer-proposals.html">Proposals</a></li>
+          <li class="nav-item"><a class="nav-link" href="freelancer-messages.html">Messages</a></li>
+  
+          <!-- New Projects Dropdown -->
+          <li class="nav-item"><a class="nav-link active" href="freelancer-progress.html">Progress</a></li>
+
+  
+          <li class="nav-item"><a class="nav-link" href="freelancer-earnings.html">Earnings</a></li>
+          <li class="nav-item"><a class="nav-link" href="freelancer-settings.html">Settings</a></li>
+          <li class="nav-item"><a class="nav-link logout-btn" href="../logout.php">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+  
+<div class="chat-wrapper">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <ul class="chat-list" id="chatList"></ul>
+  </div>
+
+  <!-- Main Chat Window -->
+  <div class="chat-main">
+    <div class="chat-header" id="receiverName">Select a chat</div>
+    <div class="chat-messages" id="chatBox"></div>
+    <div class="chat-input">
+      <input type="text" id="messageInput" placeholder="Type a message..." />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let loggedInUserId = 1; // This should be set by PHP session
+let currentChatUserId = null;
+let liveMessageInterval = null;
+
+// Load chat list on the left
+function loadChatList() {
+  fetch(`php/fetch_chats.php?user_id=${loggedInUserId}`)
+    .then(res => res.json())
+    .then(data => {
+      const list = document.getElementById('chatList');
+      list.innerHTML = '';
+      data.forEach(user => {
+        const li = document.createElement('li');
+        li.textContent = user.name;
+        li.onclick = () => {
+          currentChatUserId = user.user_id;
+          document.getElementById("receiverName").textContent = user.name;
+          loadMessages(); // Initial load
+          if (liveMessageInterval) clearInterval(liveMessageInterval);
+          liveMessageInterval = setInterval(loadMessages, 2000); // Fetch every 2 seconds
+        };
+        list.appendChild(li);
+      });
+    })
+    .catch(error => console.error('Error loading chat list:', error));
+}
+
+// Load messages between current user and selected chat user
+function loadMessages() {
+  if (!currentChatUserId) return;
+
+  fetch(`php/fetch_messages.php?sender_id=${loggedInUserId}&receiver_id=${currentChatUserId}`)
+    .then(res => res.json())
+    .then(data => {
+      const box = document.getElementById('chatBox');
+      box.innerHTML = '';
+      data.forEach(msg => {
+        const div = document.createElement('div');
+        div.classList.add('message', msg.sender_id == loggedInUserId ? 'sender' : 'receiver');
+        div.innerHTML = `
+          ${msg.message_text}
+          <small>${msg.sender_name} • ${msg.created_at}</small>
+        `;
+        box.appendChild(div);
+      });
+      box.scrollTop = box.scrollHeight;
+    })
+    .catch(error => console.error('Error loading messages:', error));
+}
+
+// Send a new message
+function sendMessage() {
+  const messageText = document.getElementById('messageInput').value.trim();
+  if (!messageText || !currentChatUserId) return;
+
+  const messageData = {
+    sender_id: loggedInUserId,
+    receiver_id: currentChatUserId,
+    message_text: messageText
+  };
+
+  fetch('php/send_message.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(messageData)
+  })
+  .then(response => response.json())
+  .then(data => {
+    document.getElementById('messageInput').value = '';
+    loadMessages();
+  })
+  .catch(error => console.error('Error sending message:', error));
+}
+
+window.onload = function() {
+  loadChatList();
+};
+</script>
+
+</body>
+</html>

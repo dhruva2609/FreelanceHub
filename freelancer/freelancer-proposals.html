@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Proposals</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/commonf.css">
+    <link rel="stylesheet" href="css/freelancer-proposals.css">
+    <script defer src="js/freelancer-proposals.js"></script>
+    <script defer src="js/commonf.js"></script>
+    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+  </head>
+<body>
+
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="freelancer-dashboard.html">Freelancer Panel</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="freelancer-dashboard.html">Dashboard</a></li>
+          
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="findWorkDropdown" role="button" data-bs-toggle="dropdown">Find Work</a>
+            <ul class="dropdown-menu" aria-labelledby="findWorkDropdown">
+              <li><a class="dropdown-item" href="freelancer-jobs.html">Browse Jobs</a></li>
+              <li><a class="dropdown-item" href="saved-jobs.html">Saved Jobs</a></li>
+            </ul>
+          </li>
+          
+          <li class="nav-item"><a class="nav-link" href="freelancer-proposals.html">Proposals</a></li>
+          <li class="nav-item"><a class="nav-link" href="freelancer-messages.html">Messages</a></li>
+  
+          <!-- New Projects Dropdown -->
+          <li class="nav-item"><a class="nav-link active" href="freelancer-progress.html">Progress</a></li>
+
+  
+          <li class="nav-item"><a class="nav-link" href="freelancer-earnings.html">Earnings</a></li>
+          <li class="nav-item"><a class="nav-link" href="freelancer-settings.html">Settings</a></li>
+          <li class="nav-item"><a class="nav-link logout-btn" href="../logout.php">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+  
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <h2>My Proposals</h2>
+        <div id="proposals-list" class="row">
+            <!-- Proposals will be displayed here dynamically -->
+        </div>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+          fetchProposals();
+      });
+      
+      function fetchProposals() {
+          fetch("php/fetch_proposals.php")
+              .then(response => {
+                  if (!response.ok) {
+                      throw new Error("Network response was not ok");
+                  }
+                  return response.json();
+              })
+              .then(data => {
+                  const proposalsList = document.getElementById("proposals-list");
+                  proposalsList.innerHTML = "";
+      
+                  if (!data.success || !Array.isArray(data.proposals)) {
+                      proposalsList.innerHTML = "<p>No proposals found or error in response.</p>";
+                      return;
+                  }
+      
+                  if (data.proposals.length === 0) {
+                      proposalsList.innerHTML = "<p>No proposals found.</p>";
+                      return;
+                  }
+      
+                  data.proposals.forEach(proposal => {
+                      const proposalCard = `
+                          <div class="col-md-6">
+                              <div class="card p-3 mb-3">
+                                  <h5>${proposal.job_title}</h5>
+                                  <p><strong>Bid:</strong> $${parseFloat(proposal.bid_amount).toFixed(2)}</p>
+                                  <p><strong>Status:</strong> ${proposal.status}</p>
+                                  <p>${proposal.proposal_text}</p>
+                                  <p><small><strong>Submitted on:</strong> ${new Date(proposal.created_at).toLocaleString()}</small></p>
+                                  <a href="php/job-details.php?job_id=${proposal.job_id}" class="btn btn-primary">View Job</a>
+                              </div>
+                          </div>
+                      `;
+                      proposalsList.innerHTML += proposalCard;
+                  });
+              })
+              .catch(error => {
+                  console.error("Error fetching proposals:", error);
+                  const proposalsList = document.getElementById("proposals-list");
+                  proposalsList.innerHTML = `<p class="text-danger">Error loading proposals. Please try again later.</p>`;
+              });
+      }
+      </script>
+      
+</body>
+</html>

@@ -1,0 +1,59 @@
+/* Page Title */
+.page-title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #4E73DF;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+/* Job List Container */
+.jobList {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Job Card */
+.job-card {
+    background-color: #f8f9fc; /* Soft bluish white */
+    border-left: 5px solid #4E73DF;
+    border-radius: 10px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    color: #212529; /* Text color */
+}
+
+/* Hover Effect */
+.job-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Job Title */
+.job-card .card-title {
+    color: #4E73DF;
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+/* Paragraphs inside job card */
+.job-card p {
+    margin: 0.3rem 0;
+    font-size: 0.95rem;
+    color: #444; /* Ensures good readability */
+}
+
+/* View Details Button */
+.job-card .btn-primary {
+    background-color: #4E73DF;
+    border: none;
+    margin-top: 10px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.95rem;
+    transition: background-color 0.3s ease;
+}
+
+.job-card .btn-primary:hover {
+    background-color: #3c5ccf;
+}
